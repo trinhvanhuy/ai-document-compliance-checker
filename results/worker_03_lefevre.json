@@ -61,7 +61,7 @@
           "evidence": [
             {
               "page": 1,
-              "quote": "L'utilisateur verse au preteur 38 EUR / heure, soit le salaire\ncharge du salarie majore d'une commission de 30 %.\nLe preteur n'est pas une entreprise de travail temporaire.",
+              "quote": "charge du salarie majore d'une commission de 30 %.\nLe preteur n'est pas une entreprise de travail temporaire.",
               "document": "convention.pdf"
             }
           ]
@@ -108,7 +108,7 @@
           "evidence": [
             {
               "page": 1,
-              "quote": "Date de delivrance : 10/01/2026",
+              "quote": "Date de fin de validite : 10/01/2029",
               "document": "h0b0.pdf"
             }
           ]
