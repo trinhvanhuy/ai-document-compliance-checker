@@ -9,8 +9,7 @@
     "h0b0.pdf: holder is Kevin LEFORT, worker is Karim Lefevre",
     "pasi_scan.pdf: document is illegible, key fields can't be read reliably",
     "pasi_scan.pdf: no expiry date found",
-    "pasi_scan.pdf: holder name not found on the document",
-    "Electrical work requires a valid H0B0 habilitation. -> h0b0.pdf is not valid: holder is Kevin LEFORT, worker is Karim Lefevre"
+    "pasi_scan.pdf: holder name not found on the document"
   ],
   "documents": [
     {
@@ -61,7 +60,7 @@
           "evidence": [
             {
               "page": 1,
-              "quote": "charge du salarie majore d'une commission de 30 %.\nLe preteur n'est pas une entreprise de travail temporaire.",
+              "quote": "charge du salarie majore d'une commission de 30 %.",
               "document": "convention.pdf"
             }
           ]
@@ -73,6 +72,11 @@
       "detected_type": "h0b0",
       "holder_name": "Kevin LEFORT",
       "issue_date": "2026-01-10",
+      "issue_evidence": {
+        "document": "h0b0.pdf",
+        "page": 1,
+        "quote": "Date de delivrance : 10/01/2026"
+      },
       "expiry_date": "2029-01-10",
       "verdict": "non_compliant",
       "confidence": 0.97,

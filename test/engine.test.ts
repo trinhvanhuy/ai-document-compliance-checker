@@ -34,6 +34,15 @@ describe("checkFile", () => {
     expect(report.file_checks.find((c) => c.check.includes("atex"))?.verdict).toBe("non_compliant");
   });
 
+  it("does not repeat a document failure through a client rule", async () => {
+    const report = await run("worker_02_benali");
+    // expired caces: once as a document reason, the forklift rule stays in file_checks only
+    expect(report.reasons.filter((r) => r.includes("caces")).length).toBe(1);
+    expect(report.file_checks.find((c) => c.check === "rule:forklift_requires_caces")?.verdict).toBe("non_compliant");
+    // the atex age is only caught by the rule, it must stay in the summary
+    expect(report.reasons.some((r) => r.includes("atex.pdf issued"))).toBe(true);
+  });
+
   it("extraction errors end up in human review", async () => {
     const broken: Extractor = {
       extract: async () => {

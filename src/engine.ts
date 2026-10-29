@@ -96,9 +96,13 @@ export async function checkFile(
   const docs = await Promise.all(wf.documents.map((d) => checkDocument(d, wf, extractor, rules, today)));
   const fileChecks = rules?.fileChecks(wf.worker, docs, today) ?? [];
 
+  // a rule that fails only because its document already failed says the same thing
+  // twice (expired CACES -> forklift rule), keep it in file_checks but not in the summary
+  const failedDocs = new Set(docs.filter((d) => d.verdict !== "compliant").map((d) => d.file));
+  const repeatsDoc = (c: CheckResult) => c.evidence.length > 0 && c.evidence.every((e) => e.document && failedDocs.has(e.document));
   const reasons = [
     ...docs.filter((d) => d.verdict !== "compliant").flatMap((d) => d.reasons.map((r) => `${d.file}: ${r}`)),
-    ...fileChecks.filter((c) => c.verdict !== "compliant").map((c) => c.reason),
+    ...fileChecks.filter((c) => c.verdict !== "compliant" && !repeatsDoc(c)).map((c) => c.reason),
   ];
   const confidences = [...docs.map((d) => d.confidence), ...fileChecks.map((c) => c.confidence)];
 
