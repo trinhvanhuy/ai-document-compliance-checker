@@ -42,6 +42,10 @@ export function buildDocumentReport(
     ...standardChecks(ex, wf.worker, wf.worker.declared_documents[doc.name], today),
     ...(rules?.documentChecks(ex) ?? []),
   ];
+  if (doc.totalPages) {
+    const reason = `only the first ${doc.pages.length} of ${doc.totalPages} pages were read`;
+    checks.push({ check: "complete", verdict: "needs_human_review", reason, confidence: 0.5, evidence: [] });
+  }
   for (const c of checks) for (const e of c.evidence) e.document = doc.name;
 
   return {

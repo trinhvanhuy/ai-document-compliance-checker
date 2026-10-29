@@ -15,6 +15,7 @@ export interface PdfDocument {
   name: string;
   bytes: Uint8Array;
   pages: Page[];
+  totalPages?: number; // set when it is more than pages.length (truncated)
   error?: string;
 }
 
@@ -22,7 +23,9 @@ export const hasText = (p: Page) => p.text.trim().length >= MIN_TEXT_CHARS;
 
 export const isScanned = (doc: PdfDocument) => doc.pages.length > 0 && !doc.pages.some(hasText);
 
-export async function loadPdf(file: string, maxPages = 10): Promise<PdfDocument> {
+export const MAX_PAGES = 10;
+
+export async function loadPdf(file: string, maxPages = MAX_PAGES): Promise<PdfDocument> {
   const bytes = new Uint8Array(await readFile(file));
   const doc: PdfDocument = { path: file, name: path.basename(file), bytes, pages: [] };
   try {
@@ -30,6 +33,7 @@ export async function loadPdf(file: string, maxPages = 10): Promise<PdfDocument>
     const pdf = await getDocumentProxy(bytes.slice());
     const { text } = await extractText(pdf, { mergePages: false });
     doc.pages = text.slice(0, maxPages).map((t, i) => ({ number: i + 1, text: t }));
+    if (text.length > maxPages) doc.totalPages = text.length;
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     doc.error = /password/i.test(msg) ? "pdf is password protected" : `cannot open pdf: ${msg}`;
