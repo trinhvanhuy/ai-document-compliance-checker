@@ -25,6 +25,13 @@ export type Worker = z.infer<typeof Worker>;
 
 export const fullName = (w: Worker) => `${w.first_name} ${w.last_name}`;
 
+/** Strict YYYY-MM-DD that is also a real calendar date (no 2026-02-30). */
+export function isIsoDate(s: string | null | undefined): s is string {
+  if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const d = new Date(`${s}T00:00:00Z`);
+  return !Number.isNaN(d.getTime()) && d.toISOString().startsWith(s);
+}
+
 export interface Evidence {
   document?: string;
   page?: number;

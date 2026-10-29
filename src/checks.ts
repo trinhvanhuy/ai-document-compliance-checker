@@ -1,6 +1,6 @@
 /** Standard Pixid checks, applied to every document whatever the client. */
 import type { Extraction, Quote } from "./extractor.js";
-import { fullName, type CheckResult, type DocType, type Evidence, type Verdict, type Worker } from "./models.js";
+import { fullName, isIsoDate, type CheckResult, type DocType, type Evidence, type Verdict, type Worker } from "./models.js";
 
 // types that must carry an expiry date
 const EXPIRING_TYPES: DocType[] = ["pasi", "caces", "h0b0", "driving_licence"];
@@ -48,6 +48,10 @@ export function checkExpiry(ex: Extraction, today: string): CheckResult | null {
   if (!EXPIRING_TYPES.includes(ex.doc_type)) return null;
   const e = ev(ex.date_evidence);
   if (!ex.expiry_date) return result("not_expired", "needs_human_review", "no expiry date found", 0.5, e);
+  // the model is asked for YYYY-MM-DD but nothing forces it, "31/12/2026" would compare wrong
+  if (!isIsoDate(ex.expiry_date)) {
+    return result("not_expired", "needs_human_review", `expiry date "${ex.expiry_date}" is not a valid date`, 0.5, e);
+  }
   // ISO dates compare as strings
   if (ex.expiry_date < today) return result("not_expired", "non_compliant", `expired on ${ex.expiry_date}`, 1, e);
   return result("not_expired", "compliant", `valid until ${ex.expiry_date}`, 1, e);
