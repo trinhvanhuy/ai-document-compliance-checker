@@ -60,3 +60,14 @@ describe("standard checks", () => {
     expect(results.some((r) => r.check === "suspicious_content")).toBe(true);
   });
 });
+
+describe("name matching", () => {
+  it("ignores accents and hyphens", () => {
+    const w = { ...WORKER, first_name: "Karim", last_name: "Lefèvre-Durand" };
+    expect(checkName(extraction({ holder_name: "LEFEVRE DURAND Karim" }), w)?.verdict).toBe("compliant");
+  });
+
+  it("near miss goes to review", () => {
+    expect(checkName(extraction({ holder_name: "Julien Marchant" }), WORKER)?.verdict).toBe("needs_human_review");
+  });
+});
