@@ -1,0 +1,12 @@
+{
+  "first_name": "Karim",
+  "last_name": "Lefevre",
+  "assignment": [
+    "electrical_work"
+  ],
+  "declared_documents": {
+    "h0b0.pdf": "h0b0",
+    "pasi_scan.pdf": "pasi",
+    "convention.pdf": "other"
+  }
+}
