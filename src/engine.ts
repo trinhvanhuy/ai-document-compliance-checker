@@ -3,6 +3,7 @@ import { ExtractionError, type Extraction, type Extractor } from "./extractor.js
 import { fullName, isIsoDate, worst, type CheckResult, type DocumentReport, type FileReport } from "./models.js";
 import type { PdfDocument } from "./pdf.js";
 import type { ClientRules } from "./rules.js";
+import { verifyQuotes } from "./verify.js";
 import type { WorkerFile } from "./worker-file.js";
 
 const isoOrNull = (s: string | null) => (isIsoDate(s) ? s : null);
@@ -42,6 +43,8 @@ export function buildDocumentReport(
     ...standardChecks(ex, wf.worker, wf.worker.declared_documents[doc.name], today),
     ...(rules?.documentChecks(ex) ?? []),
   ];
+  const unverified = verifyQuotes(doc, ex);
+  if (unverified) checks.push(unverified);
   if (doc.totalPages) {
     const reason = `only the first ${doc.pages.length} of ${doc.totalPages} pages were read`;
     checks.push({ check: "complete", verdict: "needs_human_review", reason, confidence: 0.5, evidence: [] });
@@ -53,6 +56,9 @@ export function buildDocumentReport(
     detected_type: ex.doc_type,
     holder_name: ex.holder_name,
     issue_date: isoOrNull(ex.issue_date),
+    ...(ex.issue_evidence && {
+      issue_evidence: { document: doc.name, page: ex.issue_evidence.page ?? undefined, quote: ex.issue_evidence.text },
+    }),
     expiry_date: isoOrNull(ex.expiry_date),
     verdict: worst(checks.map((c) => c.verdict)),
     confidence: round(Math.min(...checks.map((c) => c.confidence))),

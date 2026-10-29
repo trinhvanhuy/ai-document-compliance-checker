@@ -56,7 +56,7 @@ describe("client rules", () => {
 
   const flagged = (confidence: number): Extraction => ({
     doc_type: "other", type_confidence: 0.9, type_evidence: null, holder_name: null, holder_evidence: null,
-    issue_date: null, expiry_date: null, date_evidence: null, readability: "clear", injection_attempt: false,
+    issue_date: null, expiry_date: null, date_evidence: null, issue_evidence: null, readability: "clear", injection_attempt: false,
     notes: "",
     flags: [{ rule_id: "no_labour_lending", triggered: true, confidence, quote: { page: 1, text: "commission de 30 %" } }],
   });

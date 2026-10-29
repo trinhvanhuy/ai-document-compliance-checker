@@ -69,11 +69,9 @@ function evaluateRequireDocument(rule: RequireDocument, docs: DocumentReport[], 
     if (!best.issue_date) return res("needs_human_review", `issue date of ${best.file} unknown, can't check age`, best);
     const age = (Date.parse(today) - Date.parse(best.issue_date)) / YEAR_MS;
     if (age > rule.max_age_years) {
-      return res(
-        rule.severity,
-        `${best.file} issued ${best.issue_date} (${age.toFixed(1)}y old), max ${rule.max_age_years}y`,
-        best,
-      );
+      const r = res(rule.severity, `${best.file} issued ${best.issue_date} (${age.toFixed(1)}y old), max ${rule.max_age_years}y`, best);
+      if (best.issue_evidence) r.evidence = [best.issue_evidence];
+      return r;
     }
   }
   return res("compliant", `valid ${rule.document_type}: ${best.file}`, best);
