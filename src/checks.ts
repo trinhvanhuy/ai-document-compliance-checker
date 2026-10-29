@@ -57,17 +57,17 @@ export function checkExpiry(ex: Extraction, today: string): CheckResult | null {
   return result("not_expired", "compliant", `valid until ${ex.expiry_date}`, 1, e);
 }
 
-// "Lefèvre-Durand" -> "durand lefevre", order independent
-export const normalizeName = (name: string) =>
+const nameTokens = (name: string) =>
   name
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
-    .replace(/[-']/g, " ")
+    .replace(/[-'.,]/g, " ")
     .split(/\s+/)
-    .filter(Boolean)
-    .sort()
-    .join(" ");
+    .filter(Boolean);
+
+// "Lefèvre-Durand" -> "durand lefevre", order independent
+export const normalizeName = (name: string) => nameTokens(name).sort().join(" ");
 
 function levenshtein(a: string, b: string): number {
   let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
@@ -87,6 +87,33 @@ export function nameSimilarity(a: string, b: string): number {
   return 1 - levenshtein(x, y) / Math.max(x.length, y.length, 1);
 }
 
+// "Marie Dupont épouse Martin", "Martin née Dupont": the document can carry the
+// married and the maiden name, the worker file only one of them
+const MARRIED_MARKERS = new Set(["epouse", "ep", "nee", "veuve", "vve"]);
+
+/**
+ * Edit cost of matching each worker token to its closest holder token.
+ * Token by token with an absolute distance, a ratio is too strict on short names
+ * ("Leo Marc" vs "Leo Mark" is 1 letter but only 0.875 similar).
+ */
+function tokenCost(worker: string[], holder: string[]): number {
+  const left = [...holder];
+  let cost = 0;
+  for (const w of worker) {
+    let best = -1;
+    let bestD = Infinity;
+    left.forEach((h, i) => {
+      const d = levenshtein(w, h);
+      if (d < bestD) [best, bestD] = [i, d];
+    });
+    if (best < 0) return Infinity;
+    cost += bestD;
+    left.splice(best, 1);
+  }
+  return cost;
+}
+
+const MAX_TYPOS = 2;
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
 export function checkName(ex: Extraction, worker: Worker): CheckResult | null {
@@ -95,12 +122,28 @@ export function checkName(ex: Extraction, worker: Worker): CheckResult | null {
   const name = fullName(worker);
   if (!ex.holder_name) return result("name_matches", "needs_human_review", "holder name not found on the document", 0.5, e);
 
-  const sim = nameSimilarity(ex.holder_name, name);
-  if (sim === 1) return result("name_matches", "compliant", `holder ${ex.holder_name} matches worker`, 1, e);
-  if (sim >= 0.9) {
-    // one letter off, typo or ocr error: let a human decide
+  const w = nameTokens(name);
+  const h = nameTokens(ex.holder_name);
+  if (normalizeName(ex.holder_name) === normalizeName(name)) {
+    return result("name_matches", "compliant", `holder ${ex.holder_name} matches worker`, 1, e);
+  }
+
+  const married = h.some((t) => MARRIED_MARKERS.has(t));
+  const holderNames = h.filter((t) => !MARRIED_MARKERS.has(t));
+  const cost = tokenCost(w, holderNames);
+
+  if (married && cost <= 1) {
+    const reason = `holder ${ex.holder_name} has a married / maiden name, check it is ${name}`;
+    return result("name_matches", "needs_human_review", reason, 0.8, e);
+  }
+  if (cost <= MAX_TYPOS && holderNames.length === w.length) {
+    // a letter or two off, typo or ocr error: let a human decide
     const reason = `holder ${ex.holder_name} is close to ${name}, check spelling`;
-    return result("name_matches", "needs_human_review", reason, round2(sim), e);
+    return result("name_matches", "needs_human_review", reason, round2(nameSimilarity(ex.holder_name, name)), e);
+  }
+  if (cost === 0) {
+    // all the worker's names are there plus some more (middle name)
+    return result("name_matches", "needs_human_review", `holder ${ex.holder_name} has extra names, check it is ${name}`, 0.8, e);
   }
   return result("name_matches", "non_compliant", `holder is ${ex.holder_name}, worker is ${name}`, 1, e);
 }

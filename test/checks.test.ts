@@ -77,4 +77,21 @@ describe("name matching", () => {
   it("near miss goes to review", () => {
     expect(checkName(extraction({ holder_name: "Julien Marchant" }), WORKER)?.verdict).toBe("needs_human_review");
   });
+
+  it("one letter off on a short name goes to review too", () => {
+    const w = { ...WORKER, first_name: "Leo", last_name: "Marc" };
+    expect(checkName(extraction({ holder_name: "Leo Mark" }), w)?.verdict).toBe("needs_human_review");
+  });
+
+  it("different first name is still a mismatch", () => {
+    const w = { ...WORKER, first_name: "Karim", last_name: "Lefevre" };
+    expect(checkName(extraction({ holder_name: "Kevin Lefevre" }), w)?.verdict).toBe("non_compliant");
+  });
+
+  it("married name goes to review", () => {
+    const w = { ...WORKER, first_name: "Marie", last_name: "Dupont" };
+    for (const holder of ["Marie DUPONT épouse MARTIN", "MARTIN née Dupont Marie"]) {
+      expect(checkName(extraction({ holder_name: holder }), w)?.verdict).toBe("needs_human_review");
+    }
+  });
 });
