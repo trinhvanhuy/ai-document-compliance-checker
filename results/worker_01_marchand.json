@@ -47,7 +47,7 @@
           "evidence": [
             {
               "page": 1,
-              "quote": "Date de delivrance : 02/04/2025\nDate de fin de validite : 02/04/2028",
+              "quote": "Date de fin de validite : 02/04/2028",
               "document": "h0b0.pdf"
             }
           ]
@@ -74,7 +74,7 @@
       "issue_date": "2024-03-12",
       "expiry_date": "2029-03-12",
       "verdict": "compliant",
-      "confidence": 0.98,
+      "confidence": 0.97,
       "reasons": [
         "all checks passed"
       ],
@@ -90,7 +90,7 @@
           "check": "document_type",
           "verdict": "compliant",
           "reason": "document is pasi",
-          "confidence": 0.98,
+          "confidence": 0.97,
           "evidence": [
             {
               "page": 1,
@@ -107,7 +107,7 @@
           "evidence": [
             {
               "page": 1,
-              "quote": "Formation socle securite validee le : 12/03/2024\nValable jusqu'au : 12/03/2029",
+              "quote": "Valable jusqu'au : 12/03/2029",
               "document": "pasi.pdf"
             }
           ]
