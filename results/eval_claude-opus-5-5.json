@@ -1,0 +1,24 @@
+{
+  "extractor": "claude-opus-5-5",
+  "runs": 3,
+  "documents": 24,
+  "detection_precision_micro": 1,
+  "detection_precision_per_type": {
+    "atex": 1,
+    "caces": 1,
+    "h0b0": 1,
+    "other": 1,
+    "pasi": 1
+  },
+  "document_verdict_accuracy": 1,
+  "file_verdict_accuracy": 1,
+  "avg_latency_per_file_s": 4.96,
+  "errors": [],
+  "usage": {
+    "input_tokens": 53151,
+    "output_tokens": 8856,
+    "calls": 24
+  },
+  "cost_per_document_usd": 0.0162,
+  "cost_per_file_usd": 0.0433
+}

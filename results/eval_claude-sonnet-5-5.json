@@ -1,0 +1,24 @@
+{
+  "extractor": "claude-sonnet-5-5",
+  "runs": 2,
+  "documents": 16,
+  "detection_precision_micro": 1,
+  "detection_precision_per_type": {
+    "atex": 1,
+    "caces": 1,
+    "h0b0": 1,
+    "other": 1,
+    "pasi": 1
+  },
+  "document_verdict_accuracy": 1,
+  "file_verdict_accuracy": 1,
+  "avg_latency_per_file_s": 3.36,
+  "errors": [],
+  "usage": {
+    "input_tokens": 35434,
+    "output_tokens": 5385,
+    "calls": 16
+  },
+  "cost_per_document_usd": 0.0078,
+  "cost_per_file_usd": 0.0208
+}
