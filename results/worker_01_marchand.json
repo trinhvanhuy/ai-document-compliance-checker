@@ -12,6 +12,11 @@
       "detected_type": "h0b0",
       "holder_name": "Julien MARCHAND",
       "issue_date": "2025-04-02",
+      "issue_evidence": {
+        "document": "h0b0.pdf",
+        "page": 1,
+        "quote": "Date de delivrance : 02/04/2025"
+      },
       "expiry_date": "2028-04-02",
       "verdict": "compliant",
       "confidence": 0.97,
@@ -34,7 +39,7 @@
           "evidence": [
             {
               "page": 1,
-              "quote": "TITRE D'HABILITATION ELECTRIQUE",
+              "quote": "Symboles d'habilitation : H0 B0",
               "document": "h0b0.pdf"
             }
           ]
@@ -72,6 +77,11 @@
       "detected_type": "pasi",
       "holder_name": "Julien MARCHAND",
       "issue_date": "2024-03-12",
+      "issue_evidence": {
+        "document": "pasi.pdf",
+        "page": 1,
+        "quote": "Formation socle securite validee le : 12/03/2024"
+      },
       "expiry_date": "2029-03-12",
       "verdict": "compliant",
       "confidence": 0.97,

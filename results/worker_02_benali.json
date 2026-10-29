@@ -6,8 +6,7 @@
   "reasons": [
     "caces.pdf: expired on 2025-06-30",
     "permis.pdf: uploaded as driving_licence but document is other",
-    "ATEX zone assignments require an ATEX certificate under 3 years old. -> atex.pdf issued 2022-09-15 (4.1y old), max 3y",
-    "Forklift driving requires a valid CACES. -> caces.pdf is not valid: expired on 2025-06-30"
+    "ATEX zone assignments require an ATEX certificate under 3 years old. -> atex.pdf issued 2022-09-15 (4.1y old), max 3y"
   ],
   "documents": [
     {
@@ -15,6 +14,11 @@
       "detected_type": "atex",
       "holder_name": "Sofia BENALI",
       "issue_date": "2022-09-15",
+      "issue_evidence": {
+        "document": "atex.pdf",
+        "page": 1,
+        "quote": "Date de la formation : 15/09/2022"
+      },
       "expiry_date": null,
       "verdict": "compliant",
       "confidence": 0.97,
@@ -62,6 +66,11 @@
       "detected_type": "caces",
       "holder_name": "Sofia Benali",
       "issue_date": "2020-06-30",
+      "issue_evidence": {
+        "document": "caces.pdf",
+        "page": 1,
+        "quote": "Date d'obtention : 30/06/2020"
+      },
       "expiry_date": "2025-06-30",
       "verdict": "non_compliant",
       "confidence": 0.97,
@@ -122,6 +131,11 @@
       "detected_type": "other",
       "holder_name": "Sofia Benali",
       "issue_date": "2026-04-03",
+      "issue_evidence": {
+        "document": "permis.pdf",
+        "page": 1,
+        "quote": "Date : 03/04/2026"
+      },
       "expiry_date": null,
       "verdict": "non_compliant",
       "confidence": 0.97,
@@ -160,7 +174,9 @@
       "confidence": 0.97,
       "evidence": [
         {
-          "document": "atex.pdf"
+          "document": "atex.pdf",
+          "page": 1,
+          "quote": "Date de la formation : 15/09/2022"
         }
       ]
     },
