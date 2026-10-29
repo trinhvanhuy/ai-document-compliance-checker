@@ -51,6 +51,7 @@ export interface DocumentReport {
   detected_type: DocType;
   holder_name: string | null;
   issue_date: string | null;
+  issue_evidence?: Evidence; // for rules on the document age
   expiry_date: string | null;
   verdict: Verdict;
   confidence: number;

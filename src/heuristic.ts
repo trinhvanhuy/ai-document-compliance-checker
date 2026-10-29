@@ -24,6 +24,12 @@ const INJECTION_RE = /ignore (all )?previous instructions|for ai reviewers/i;
 
 const iso = (d: string) => d.split("/").reverse().join("-");
 
+// the line the regex matched in, as the evidence quote
+function lineQuote(text: string, m: RegExpExecArray | null): Quote | null {
+  const line = m && text.split("\n").find((l) => l.includes(m[0]));
+  return line ? { page: 1, text: line.trim() } : null;
+}
+
 export class HeuristicExtractor implements Extractor {
   // rule id -> keywords, a flag triggers if any keyword is in the text
   constructor(private flagKeywords: Record<string, string[]> = {}) {}
@@ -31,7 +37,7 @@ export class HeuristicExtractor implements Extractor {
   async extract(doc: PdfDocument, flagQuestions: Record<string, string>): Promise<Extraction> {
     const empty = {
       type_evidence: null, holder_name: null, holder_evidence: null, issue_date: null,
-      expiry_date: null, date_evidence: null, injection_attempt: false, flags: [], notes: "",
+      expiry_date: null, date_evidence: null, issue_evidence: null, injection_attempt: false, flags: [], notes: "",
     };
     if (doc.pages.length === 0 || isScanned(doc)) {
       return { ...empty, doc_type: "other", type_confidence: 0, readability: "illegible",
@@ -62,8 +68,10 @@ export class HeuristicExtractor implements Extractor {
     if (np) holder = `${np[2]} ${np[1]}`;
     else if (n?.[1]) holder = n[1].trim();
 
-    const issue = ISSUE_RE.exec(text)?.[1];
-    const expiry = EXPIRY_RE.exec(text)?.[1];
+    const issueMatch = ISSUE_RE.exec(text);
+    const expiryMatch = EXPIRY_RE.exec(text);
+    const issue = issueMatch?.[1];
+    const expiry = expiryMatch?.[1];
 
     const flags: FlagAnswer[] = Object.keys(flagQuestions).map((id) => {
       const hit = (this.flagKeywords[id] ?? []).some((w) => low.includes(w.toLowerCase()));
@@ -78,6 +86,8 @@ export class HeuristicExtractor implements Extractor {
       holder_name: holder,
       issue_date: issue ? iso(issue) : null,
       expiry_date: expiry ? iso(expiry) : null,
+      date_evidence: lineQuote(text, expiryMatch),
+      issue_evidence: lineQuote(text, issueMatch),
       readability: "clear",
       injection_attempt: INJECTION_RE.test(text),
       flags,
