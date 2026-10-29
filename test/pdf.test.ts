@@ -27,3 +27,13 @@ describe("loadPdf", () => {
     expect(doc.error).toBeTruthy();
   });
 });
+
+describe("loadWorkerFile", () => {
+  it("loads worker.json and the attachments", async () => {
+    const { loadWorkerFile } = await import("../src/worker-file.js");
+    const wf = await loadWorkerFile(path.join(SAMPLES, "worker_02_benali"));
+    expect(wf.worker.last_name).toBe("Benali");
+    expect(wf.documents).toHaveLength(3);
+    expect(wf.worker.declared_documents["permis.pdf"]).toBe("driving_licence");
+  });
+});
