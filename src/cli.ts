@@ -5,6 +5,7 @@ import { config } from "dotenv";
 import { checkFile } from "./engine.js";
 import { ClaudeExtractor, type Extractor } from "./extractor.js";
 import { HeuristicExtractor } from "./heuristic.js";
+import { isIsoDate } from "./models.js";
 import { ClientRules } from "./rules.js";
 import { loadWorkerFile } from "./worker-file.js";
 
@@ -30,7 +31,7 @@ async function main() {
     console.log(USAGE);
     process.exit(values.help ? 0 : 1);
   }
-  if (values.today && !/^\d{4}-\d{2}-\d{2}$/.test(values.today)) throw new Error("--today must be YYYY-MM-DD");
+  if (values.today && !isIsoDate(values.today)) throw new Error("--today must be a valid YYYY-MM-DD date");
 
   config({ quiet: true });
   const rules = values.rules ? await ClientRules.load(values.rules) : null;

@@ -30,6 +30,13 @@ describe("standard checks", () => {
     expect(checkExpiry(extraction({ expiry_date: null }), TODAY)?.verdict).toBe("needs_human_review");
   });
 
+  it("non iso expiry date needs review instead of a string compare", () => {
+    // "31/12/2020" > "2026-10-29" as strings, it would pass as valid
+    for (const d of ["31/12/2020", "2026-1-5", "2026-02-30"]) {
+      expect(checkExpiry(extraction({ expiry_date: d }), TODAY)?.verdict).toBe("needs_human_review");
+    }
+  });
+
   it("no expiry check for atex", () => {
     expect(checkExpiry(extraction({ doc_type: "atex", expiry_date: null }), TODAY)).toBeNull();
   });

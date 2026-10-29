@@ -1,12 +1,14 @@
 import { standardChecks } from "./checks.js";
 import { ExtractionError, type Extraction, type Extractor } from "./extractor.js";
-import { fullName, worst, type CheckResult, type DocumentReport, type FileReport } from "./models.js";
+import { fullName, isIsoDate, worst, type CheckResult, type DocumentReport, type FileReport } from "./models.js";
 import type { PdfDocument } from "./pdf.js";
 import type { ClientRules } from "./rules.js";
 import type { WorkerFile } from "./worker-file.js";
 
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-const isoOrNull = (s: string | null) => (s && ISO_DATE.test(s) ? s : null);
+const isoOrNull = (s: string | null) => (isIsoDate(s) ? s : null);
+
+// documents are French, "today" is the Paris date, not UTC (they differ around midnight)
+export const todayInParis = (now = new Date()) => now.toLocaleDateString("en-CA", { timeZone: "Europe/Paris" });
 
 const reasonsOf = (checks: CheckResult[]) => {
   const bad = checks.filter((c) => c.verdict !== "compliant").map((c) => c.reason);
@@ -78,7 +80,7 @@ export async function checkFile(
   wf: WorkerFile,
   extractor: Extractor,
   rules: ClientRules | null = null,
-  today = new Date().toISOString().slice(0, 10),
+  today = todayInParis(),
 ): Promise<FileReport> {
   // documents are independent, run them in parallel
   const docs = await Promise.all(wf.documents.map((d) => checkDocument(d, wf, extractor, rules, today)));
