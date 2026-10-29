@@ -1,0 +1,179 @@
+{
+  "worker": "Sofia Benali",
+  "client": "Nordis Chimie",
+  "verdict": "non_compliant",
+  "confidence": 0.97,
+  "reasons": [
+    "caces.pdf: expired on 2025-06-30",
+    "permis.pdf: uploaded as driving_licence but document is other",
+    "ATEX zone assignments require an ATEX certificate under 3 years old. -> atex.pdf issued 2022-09-15 (4.1y old), max 3y",
+    "Forklift driving requires a valid CACES. -> caces.pdf is not valid: expired on 2025-06-30"
+  ],
+  "documents": [
+    {
+      "file": "atex.pdf",
+      "detected_type": "atex",
+      "holder_name": "Sofia BENALI",
+      "issue_date": "2022-09-15",
+      "expiry_date": null,
+      "verdict": "compliant",
+      "confidence": 0.97,
+      "reasons": [
+        "all checks passed"
+      ],
+      "checks": [
+        {
+          "check": "readable",
+          "verdict": "compliant",
+          "reason": "document is readable",
+          "confidence": 1,
+          "evidence": []
+        },
+        {
+          "check": "document_type",
+          "verdict": "compliant",
+          "reason": "document is atex",
+          "confidence": 0.97,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "ATTESTATION DE FORMATION ATEX",
+              "document": "atex.pdf"
+            }
+          ]
+        },
+        {
+          "check": "name_matches",
+          "verdict": "compliant",
+          "reason": "holder Sofia BENALI matches worker",
+          "confidence": 1,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "Stagiaire : Sofia BENALI",
+              "document": "atex.pdf"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "caces.pdf",
+      "detected_type": "caces",
+      "holder_name": "Sofia Benali",
+      "issue_date": "2020-06-30",
+      "expiry_date": "2025-06-30",
+      "verdict": "non_compliant",
+      "confidence": 0.97,
+      "reasons": [
+        "expired on 2025-06-30"
+      ],
+      "checks": [
+        {
+          "check": "readable",
+          "verdict": "compliant",
+          "reason": "document is readable",
+          "confidence": 1,
+          "evidence": []
+        },
+        {
+          "check": "document_type",
+          "verdict": "compliant",
+          "reason": "document is caces",
+          "confidence": 0.97,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "CERTIFICAT CACES R489",
+              "document": "caces.pdf"
+            }
+          ]
+        },
+        {
+          "check": "not_expired",
+          "verdict": "non_compliant",
+          "reason": "expired on 2025-06-30",
+          "confidence": 1,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "Date de fin de validite : 30/06/2025",
+              "document": "caces.pdf"
+            }
+          ]
+        },
+        {
+          "check": "name_matches",
+          "verdict": "compliant",
+          "reason": "holder Sofia Benali matches worker",
+          "confidence": 1,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "Candidat : Sofia Benali",
+              "document": "caces.pdf"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "permis.pdf",
+      "detected_type": "other",
+      "holder_name": "Sofia Benali",
+      "issue_date": "2026-04-03",
+      "expiry_date": null,
+      "verdict": "non_compliant",
+      "confidence": 0.97,
+      "reasons": [
+        "uploaded as driving_licence but document is other"
+      ],
+      "checks": [
+        {
+          "check": "readable",
+          "verdict": "compliant",
+          "reason": "document is readable",
+          "confidence": 1,
+          "evidence": []
+        },
+        {
+          "check": "document_type",
+          "verdict": "non_compliant",
+          "reason": "uploaded as driving_licence but document is other",
+          "confidence": 0.97,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "FACTURE N° 2026-0412",
+              "document": "permis.pdf"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "file_checks": [
+    {
+      "check": "rule:atex_certificate_under_3y",
+      "verdict": "non_compliant",
+      "reason": "ATEX zone assignments require an ATEX certificate under 3 years old. -> atex.pdf issued 2022-09-15 (4.1y old), max 3y",
+      "confidence": 0.97,
+      "evidence": [
+        {
+          "document": "atex.pdf"
+        }
+      ]
+    },
+    {
+      "check": "rule:forklift_requires_caces",
+      "verdict": "non_compliant",
+      "reason": "Forklift driving requires a valid CACES. -> caces.pdf is not valid: expired on 2025-06-30",
+      "confidence": 0.97,
+      "evidence": [
+        {
+          "document": "caces.pdf"
+        }
+      ]
+    }
+  ]
+}
