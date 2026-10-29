@@ -1,0 +1,33 @@
+# Fictional client. Rules here are loaded at runtime, adding one of the
+# existing kinds needs no code change.
+client: Nordis Chimie
+rules:
+  - id: electrical_requires_h0b0
+    description: Electrical work requires a valid H0B0 habilitation.
+    kind: require_document
+    when_assignment: electrical_work
+    document_type: h0b0
+
+  - id: atex_certificate_under_3y
+    description: ATEX zone assignments require an ATEX certificate under 3 years old.
+    kind: require_document
+    when_assignment: atex_zone
+    document_type: atex
+    max_age_years: 3
+
+  - id: forklift_requires_caces
+    description: Forklift driving requires a valid CACES.
+    kind: require_document
+    when_assignment: forklift
+    document_type: caces
+
+  - id: no_labour_lending
+    description: Flag any file suggesting illegal labour lending (pret de main d'oeuvre illicite).
+    kind: semantic_flag
+    question: >
+      Does this document suggest illegal labour lending (pret de main d'oeuvre illicite),
+      i.e. a company that is not a temporary work agency lending its employees to another
+      company for profit (commission, margin on salary)?
+    # only used by the offline extractor
+    keywords: ["mise a disposition de personnel", "pret de main"]
+    min_confidence: 0.7
