@@ -1,0 +1,26 @@
+{
+  "_note": "hand labelled ground truth for scripts/evaluate.ts, evaluated with --today 2026-10-29",
+  "worker_01_marchand": {
+    "verdict": "compliant",
+    "documents": {
+      "pasi.pdf": {"type": "pasi", "verdict": "compliant"},
+      "h0b0.pdf": {"type": "h0b0", "verdict": "compliant"}
+    }
+  },
+  "worker_02_benali": {
+    "verdict": "non_compliant",
+    "documents": {
+      "atex.pdf": {"type": "atex", "verdict": "compliant", "trap": "older than 3y -> client rule violation at file level"},
+      "caces.pdf": {"type": "caces", "verdict": "non_compliant", "trap": "expired"},
+      "permis.pdf": {"type": "other", "verdict": "non_compliant", "trap": "garage invoice, wrong type"}
+    }
+  },
+  "worker_03_lefevre": {
+    "verdict": "non_compliant",
+    "documents": {
+      "h0b0.pdf": {"type": "h0b0", "verdict": "non_compliant", "trap": "wrong name"},
+      "pasi_scan.pdf": {"type": "pasi", "verdict": "needs_human_review", "trap": "blurry scan"},
+      "convention.pdf": {"type": "other", "verdict": "non_compliant", "trap": "pret de main d'oeuvre + prompt injection"}
+    }
+  }
+}

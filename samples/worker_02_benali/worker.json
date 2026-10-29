@@ -1,0 +1,14 @@
+{
+  "first_name": "Sofia",
+  "last_name": "Benali",
+  "assignment": [
+    "atex_zone",
+    "forklift",
+    "driving"
+  ],
+  "declared_documents": {
+    "atex.pdf": "atex",
+    "caces.pdf": "caces",
+    "permis.pdf": "driving_licence"
+  }
+}
