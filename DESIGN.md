@@ -22,9 +22,15 @@ by injecting the question into the extraction prompt. *"A client adds a rule
 tomorrow"*: if it fits an existing kind, it's a YAML change, no deploy. If not, we add a
 kind (one schema + one evaluate function), then it's config for every tenant after that.
 
-Uncertainty is first class: illegible scan, low type confidence, missing date or name,
-near-miss name (OCR typo), low-confidence flag, model refusal, or exception all give
+Uncertainty is first class: illegible scan, low type confidence, missing or malformed date,
+missing name, near-miss name (up to 2 letters off, OCR typo), married / maiden name
+("Dupont épouse Martin", very common in France), low-confidence flag, quote not found in the
+text, non-PDF or missing attachment, PDF over 10 pages, model refusal, or exception all give
 `needs_human_review`, never a silent pass.
+
+Confidence is the min over the checks, and most of it is the number the model reports about
+itself. It is a ranking signal (what HR looks at first), **not a calibrated probability**. Once
+there is a real eval set, calibrate it (reliability curve per doc type) before using it as a threshold.
 
 ## Model choice
 
@@ -59,10 +65,11 @@ because a false "compliant" is the costly error. A false "needs review" just cos
 ## Risks
 
 - **Hallucinations**: the schema forces null when a field is absent, every fact carries a
-  verbatim quote. Next step: verify the quote really exists in the page text, and
-  downgrade to review if not. Dates are re-validated in code.
-- **Prompt injection inside PDFs**: document text goes in a `<document>` block declared
-  untrusted, and the model reports `injection_attempt` (the sample with hidden white text
+  verbatim quote, and the quote is searched in the PDF text layer (`verify.ts`): not found ->
+  review. Dates are re-validated in code (strict ISO, real calendar date). Scans can't be verified
+  this way, a second OCR pass would be needed.
+- **Prompt injection inside PDFs**: document text goes in a `<document-RANDOM>` block declared
+  untrusted (random tag, so a `</document>` inside the PDF can't close it; file name escaped), and the model reports `injection_attempt` (the sample with hidden white text
   is caught). Since the model doesn't produce the verdict, an injection can at worst
   falsify extracted fields, and the suspicious flag forces human review. Also worth
   doing: strip invisible text (white or 1pt) before sending.

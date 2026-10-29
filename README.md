@@ -25,7 +25,9 @@ npm run typecheck
 ```
 
 `--today` pins the reference date so the sample results are reproducible,
-drop it to use the real date. Without `-o` the JSON report goes to stdout.
+drop it to use the real date (Paris time). Without `-o` the JSON report goes to stdout.
+Exit code: `0` all compliant, `2` at least one non_compliant, `3` needs human review, `1` error,
+so it can be used in a batch script.
 
 Other model: `ANTHROPIC_MODEL=claude-haiku-5-5 npm run check -- ...`
 
@@ -43,6 +45,8 @@ samples/worker_02_benali/
 
 `declared_documents` is the type the attachment was uploaded as (what the
 temp agency says it is). The checker compares it with what it actually finds.
+Only PDFs are read for now: any other file (phone photo...) or a declared file that is
+missing still shows up in the report, as `needs_human_review`.
 
 ## Output
 
@@ -114,6 +118,7 @@ src/
   extractor.ts    claude: classify + extract fields + answer rule questions (structured output, zod)
   heuristic.ts    offline regex extractor
   checks.ts       standard Pixid checks (readable, type, expiry, name)
+  verify.ts       evidence quotes must exist in the pdf text
   rules.ts        client rule engine
   engine.ts       glue + aggregation
   cli.ts
@@ -127,6 +132,7 @@ test/             vitest
   before trusting any accuracy number. 8 docs proves the pipeline, not the precision.
 - Haiku first, escalate to Opus only when confidence is low or the doc is a scan (see DESIGN.md).
 - Split a pdf containing several documents (very common in real uploads).
+- Read jpg/png attachments (send them as image blocks), and OCR scans so their quotes can be verified too.
 - Verify issuers (CACES testing bodies, ATEX centers) against a reference list.
 - Rules: an `any_of` / `all_of` combinator, per-tenant rule versioning, and a dry-run
   mode to replay a new rule on past files before enabling it.
