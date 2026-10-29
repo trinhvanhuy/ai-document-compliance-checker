@@ -1,0 +1,144 @@
+{
+  "worker": "Julien Marchand",
+  "client": "Nordis Chimie",
+  "verdict": "compliant",
+  "confidence": 0.97,
+  "reasons": [
+    "all documents and client rules passed"
+  ],
+  "documents": [
+    {
+      "file": "h0b0.pdf",
+      "detected_type": "h0b0",
+      "holder_name": "Julien MARCHAND",
+      "issue_date": "2025-04-02",
+      "expiry_date": "2028-04-02",
+      "verdict": "compliant",
+      "confidence": 0.97,
+      "reasons": [
+        "all checks passed"
+      ],
+      "checks": [
+        {
+          "check": "readable",
+          "verdict": "compliant",
+          "reason": "document is readable",
+          "confidence": 1,
+          "evidence": []
+        },
+        {
+          "check": "document_type",
+          "verdict": "compliant",
+          "reason": "document is h0b0",
+          "confidence": 0.97,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "TITRE D'HABILITATION ELECTRIQUE",
+              "document": "h0b0.pdf"
+            }
+          ]
+        },
+        {
+          "check": "not_expired",
+          "verdict": "compliant",
+          "reason": "valid until 2028-04-02",
+          "confidence": 1,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "Date de delivrance : 02/04/2025\nDate de fin de validite : 02/04/2028",
+              "document": "h0b0.pdf"
+            }
+          ]
+        },
+        {
+          "check": "name_matches",
+          "verdict": "compliant",
+          "reason": "holder Julien MARCHAND matches worker",
+          "confidence": 1,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "Nom : MARCHAND Prenom : Julien",
+              "document": "h0b0.pdf"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "pasi.pdf",
+      "detected_type": "pasi",
+      "holder_name": "Julien MARCHAND",
+      "issue_date": "2024-03-12",
+      "expiry_date": "2029-03-12",
+      "verdict": "compliant",
+      "confidence": 0.98,
+      "reasons": [
+        "all checks passed"
+      ],
+      "checks": [
+        {
+          "check": "readable",
+          "verdict": "compliant",
+          "reason": "document is readable",
+          "confidence": 1,
+          "evidence": []
+        },
+        {
+          "check": "document_type",
+          "verdict": "compliant",
+          "reason": "document is pasi",
+          "confidence": 0.98,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "PASSEPORT SECURITE INTERIM (PASI)",
+              "document": "pasi.pdf"
+            }
+          ]
+        },
+        {
+          "check": "not_expired",
+          "verdict": "compliant",
+          "reason": "valid until 2029-03-12",
+          "confidence": 1,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "Formation socle securite validee le : 12/03/2024\nValable jusqu'au : 12/03/2029",
+              "document": "pasi.pdf"
+            }
+          ]
+        },
+        {
+          "check": "name_matches",
+          "verdict": "compliant",
+          "reason": "holder Julien MARCHAND matches worker",
+          "confidence": 1,
+          "evidence": [
+            {
+              "page": 1,
+              "quote": "Titulaire : Julien MARCHAND",
+              "document": "pasi.pdf"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "file_checks": [
+    {
+      "check": "rule:electrical_requires_h0b0",
+      "verdict": "compliant",
+      "reason": "Electrical work requires a valid H0B0 habilitation. -> valid h0b0: h0b0.pdf",
+      "confidence": 0.97,
+      "evidence": [
+        {
+          "document": "h0b0.pdf"
+        }
+      ]
+    }
+  ]
+}
